@@ -1,0 +1,72 @@
+import re
+
+def assess_password_strength(password):
+    # Initialize strength score and feedback list
+    strength_score = 0
+    feedback = []
+
+    # Length check
+    length = len(password)
+    print(password)
+    print(length)
+    if length >= 12:
+        strength_score += 2
+        feedback.append("Good length (12 or more characters).")
+    elif 8 <= length < 12:
+        strength_score += 1
+        feedback.append("Fair length (8-11 characters).")
+    else:
+        feedback.append("Poor length (less than 8 characters).")
+
+    # Complexity checks
+    if re.search(r'[A-Z]', password):
+        strength_score += 1
+        feedback.append("Includes uppercase letters.")
+    else:
+        feedback.append("No uppercase letters.")
+
+    if re.search(r'[a-z]', password):
+        strength_score += 1
+        feedback.append("Includes lowercase letters.")
+    else:
+        feedback.append("No lowercase letters.")
+
+    if re.search(r'\d', password):
+        strength_score += 1
+        feedback.append("Includes numbers.")
+    else:
+        feedback.append("No numbers.")
+
+    if re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        strength_score += 1
+        feedback.append("Includes special characters.")
+    else:
+        feedback.append("No special characters.")
+
+    # Uniqueness check (no repeating characters)
+    if len(set(password)) == len(password):
+        strength_score += 1
+        feedback.append("No repeating characters.")
+    else:
+        feedback.append("Contains repeating characters.")
+
+    # Summarize strength
+    if strength_score >= 7:
+        feedback.append("Password strength: Strong")
+    elif 4 <= strength_score < 7:
+        feedback.append("Password strength: Medium")
+    else:
+        feedback.append("Password strength: Weak")
+
+    return {
+        "strength_score": strength_score,
+        "feedback": feedback
+    }
+
+# Example usage
+password = "Heqwertyuo1234qafa@#$"
+result = assess_password_strength(password)
+print(f"Strength Score: {result['strength_score']}")
+print("Feedback:")
+for item in result['feedback']:
+    print(f" - {item}")
